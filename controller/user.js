@@ -1,4 +1,6 @@
 const { registerModel, findUserByUserName } = require('../model/user');
+const {cryptoPassword} = require('../utils/index');
+const {secret} = require('../config/index');
 const Joi = require('joi');
 module.exports.registerController = async function (ctx) {
     // 获取请求post参数
@@ -31,7 +33,7 @@ module.exports.registerController = async function (ctx) {
             message: '当前用户已注册'
         }
     } else {
-        await registerModel(username, password, mobile, smscode);
+        await registerModel(username, cryptoPassword(password + secret), mobile, smscode);
         ctx.body = {
             status: 200,
             message: '注册成功'
