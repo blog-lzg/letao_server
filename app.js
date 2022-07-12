@@ -12,6 +12,7 @@ dotenv.config();
 
 const home = require('./routes/home')
 const category = require('./routes/category')
+const user = require('./routes/user')
 
 
 // error handler
@@ -39,6 +40,7 @@ app.use(async (ctx, next) => {
 
 app.use(home.routes(), home.allowedMethods())
 app.use(category.routes(), category.allowedMethods())
+app.use(user.routes(), user.allowedMethods())
 
 // error-handling
 app.on('error', (err, ctx) => {
