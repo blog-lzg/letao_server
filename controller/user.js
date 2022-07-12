@@ -1,6 +1,7 @@
-const { registerModel, findUserByUserName } = require('../model/user');
+const { registerModel, findUserByUserName,login } = require('../model/user');
 const {cryptoPassword} = require('../utils/index');
 const {secret} = require('../config/index');
+
 const Joi = require('joi');
 module.exports.registerController = async function (ctx) {
     // 获取请求post参数
@@ -40,4 +41,25 @@ module.exports.registerController = async function (ctx) {
         }
     }
 
+}
+
+module.exports.loginController = async function (ctx) {
+     const {username, password} = ctx.request.body;
+     const result = await login(username, cryptoPassword(password+secret))
+     if (result[0]) {
+        ctx.body = {
+            status:200,
+            userInfo:{
+                username:result[0].username,
+                mobile:result[0].mobile
+            },
+            message:'登录成功'
+        }
+     }else {
+        ctx.body = {
+            status:400,
+            message:'登录失败'
+        }
+     }
+    
 }

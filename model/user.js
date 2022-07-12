@@ -9,3 +9,8 @@ module.exports.registerModel = function (username, password, mobile, smscode) {
 module.exports.findUserByUserName = function (username) {
     return query( `select * from user where username = '${username}'`)
 }
+
+// 登录
+module.exports.login = function (username, password) {
+    return query(`select * from user where  username='${username}' and password='${password}'`);
+}
