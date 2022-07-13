@@ -6,6 +6,8 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const dotenv = require('dotenv')
+const {secret} = require('./config/index');
+var jwt = require('koa-jwt');
 
 // 启动dotenv
 dotenv.config();
@@ -18,6 +20,24 @@ const sms = require('./routes/sms')
 
 // error handler
 onerror(app)
+
+// 使用中间件校验token
+app.use(function(ctx, next){
+  return next().catch((err) => {
+    if (401 == err.status) {
+      ctx.status = 401;
+      ctx.body = 'Token校验失败,请在请求头中写入token\n';
+    } else {
+      throw err;
+    }
+  });
+});
+
+// unless 排除哪些接口不需要token校验
+app.use(jwt({ secret}).unless({ path: [/^\/public/, /^\/rigister/,/^\/login/] }));
+
+
+
 
 // middlewares
 app.use(bodyparser({
