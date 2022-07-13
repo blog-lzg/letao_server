@@ -1,6 +1,7 @@
 const { registerModel, findUserByUserName,login } = require('../model/user');
 const {cryptoPassword} = require('../utils/index');
 const {secret} = require('../config/index');
+const jwt = require('jsonwebtoken');
 
 const Joi = require('joi');
 module.exports.registerController = async function (ctx) {
@@ -47,12 +48,15 @@ module.exports.loginController = async function (ctx) {
      const {username, password} = ctx.request.body;
      const result = await login(username, cryptoPassword(password+secret))
      if (result[0]) {
+        // 生成token
+        const token = jwt.sign({username,password }, secret, {expiresIn: 2 * 60 * 60 });
         ctx.body = {
             status:200,
             userInfo:{
                 username:result[0].username,
                 mobile:result[0].mobile
             },
+            token,
             message:'登录成功'
         }
      }else {

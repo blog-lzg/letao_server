@@ -12,6 +12,7 @@
     "debug": "^4.1.1",
     "dotenv": "^16.0.1",
     "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
     "koa": "^2.7.0",
     "koa-bodyparser": "^4.2.1",
     "koa-convert": "^1.2.0",
